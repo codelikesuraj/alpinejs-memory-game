@@ -24,13 +24,13 @@
         Reset
       </button>
 
-      <div class="flex-1 grid grid-cols-3 justify-center gap-2 p-10">
+      <div class="grid grid-cols-3 lg:grid-cols-4 justify-center p-2 place-items-center space-x-3 space-y-2">
         <template x-for="card in cards">
-          <div class="flex">
+          <div class="">
             <button
               x-show="! card.cleared"
               :style="'background: ' + (card.flipped ? card.color : 'gray')"
-              class="flex-1 aspect-video"
+              class="flex-1 w-20 md:w-30 lg:w-40 aspect-square"
               x-on:click="flipCard(card)"
               :disabled="flippedCards.length >= 2"
             ></button>
