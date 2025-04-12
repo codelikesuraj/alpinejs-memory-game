@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlipCard</title>
+    <link rel="stylesheet" href="./style.css" />
+    <meta name="description" content="FlipCard Game" />
+    <style>
+      @import "tailwindcss";
+    </style>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body>
+    <div x-data="game" class="h-screen flex justify-center items-center">
+      <button
+        x-on:click="reset"
+        class="fixed top-0 m-10 px-2 py-1 lg:px-4 lg:py-2 bg-orange-200 border-1 text-orange-800 border-orange-800 rounded font-semibold tracking-wide"
+      >
+        Reset
+      </button>
+
+      <div class="flex-1 grid grid-cols-3 justify-center gap-2 p-10">
+        <template x-for="card in cards">
+          <div class="flex">
+            <button
+              x-show="! card.cleared"
+              :style="'background: ' + (card.flipped ? card.color : 'gray')"
+              class="flex-1 aspect-video"
+              x-on:click="flipCard(card)"
+              :disabled="flippedCards.length >= 2"
+            ></button>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <script type="text/javascript" defer>
+      function pause(milliseconds) {
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
+      }
+
+      function game() {
+        return {
+          cards: [
+            { color: "red", flipped: false, cleared: false },
+            { color: "orange", flipped: false, cleared: false },
+            { color: "yellow", flipped: false, cleared: false },
+            { color: "green", flipped: false, cleared: false },
+            { color: "blue", flipped: false, cleared: false },
+            { color: "indigo", flipped: false, cleared: false },
+            { color: "red", flipped: false, cleared: false },
+            { color: "orange", flipped: false, cleared: false },
+            { color: "yellow", flipped: false, cleared: false },
+            { color: "green", flipped: false, cleared: false },
+            { color: "blue", flipped: false, cleared: false },
+            { color: "indigo", flipped: false, cleared: false },
+          ].sort(() => Math.random() - 0.5),
+
+          get clearedCards() {
+            return this.cards.filter((card) => card.cleared);
+          },
+
+          get flippedCards() {
+            return this.cards.filter((card) => card.flipped);
+          },
+
+          get remainingCards() {
+            return this.cards.filter((card) => !card.cleared);
+          },
+
+          get hasMatch() {
+            return this.flippedCards[0].color === this.flippedCards[1].color;
+          },
+
+          get points() {
+            return this.clearedCards.length;
+          },
+
+          reset() {
+            this.cards.forEach((card) => {
+              card.cleared = false;
+              card.flipped = false;
+            });
+          },
+
+          async flipCard(card) {
+            card.flipped = !card.flipped;
+
+            if (this.flippedCards.length !== 2) {
+              return;
+            }
+
+            if (this.hasMatch) {
+              await pause(500);
+              this.flippedCards.forEach((card) => (card.cleared = true));
+
+              if (!this.remainingCards.length) {
+                alert("You won!");
+              }
+            } else {
+              await pause(1000);
+            }
+
+            this.flippedCards.forEach((card) => (card.flipped = false));
+          },
+        };
+      }
+    </script>
+  </body>
+</html>
