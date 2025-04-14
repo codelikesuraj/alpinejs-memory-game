@@ -17,13 +17,15 @@
   <body>
     <div
       x-data="game"
-      class="h-screen flex flex-col justify-evenly items-center"
+      class="h-screen flex flex-col justify-between items-center py-4"
     >
       <div class="text-center space-y-2">
-        <h1 class="font-bold text-4xl absolute top-0 right-0 left-0 py-2">
+        <h1 class="font-bold text-4xl pt-2">
           Memory Game
         </h1>
-        <div class="text-xl font-semibold">
+        <div class="tracking-wider">By <a class="underline font-semibold" href="https://abdulbakisuraj.com" target="_blank">Abdulbaki Suraj</a>.</div>
+
+        <div class="text-xl font-semibold pt-4">
           Time spent -
           <span x-text="formattedTime(duration.hours)"></span> :
           <span x-text="formattedTime(duration.minutes)"></span> :
@@ -45,15 +47,12 @@
         </template>
       </div>
 
-      <div class="text-center">
-        <button
-          x-on:click="reset"
-          class="m-10 px-2 py-1 lg:px-4 lg:py-2 bg-orange-200 border-1 text-orange-800 border-orange-800 rounded font-semibold tracking-wide"
-        >
-          New Game
-        </button>
-        <div class="tracking-wider">Made with love by <a class="underline font-semibold" href="https://abdulbakisuraj.com" target="_blank">Abdulbaki Suraj</a>.</div>
-      </div>
+      <button
+        x-on:click="reset"
+        class="m-10 px-2 py-1 lg:px-4 lg:py-2 bg-orange-200 border-1 text-orange-800 border-orange-800 rounded font-semibold tracking-wide"
+      >
+        New Game
+      </button>
     </div>
 
     <script type="text/javascript" defer>
