@@ -15,17 +15,23 @@
     ></script>
   </head>
   <body>
-    <div x-data="game" class="h-screen flex justify-center items-center">
-      <button
-        x-on:click="reset"
-        class="fixed top-0 m-10 px-2 py-1 lg:px-4 lg:py-2 bg-orange-200 border-1 text-orange-800 border-orange-800 rounded font-semibold tracking-wide"
-      >
-        New Game
-      </button>
+    <div
+      x-data="game"
+      class="h-screen flex flex-col justify-evenly items-center"
+    >
+      <div class="text-center space-y-2">
+        <h1 class="font-bold text-4xl absolute top-0 right-0 left-0 py-2">
+          Memory Game
+        </h1>
+        <div class="text-xl font-semibold">
+          Time spent -
+          <span x-text="formattedTime(duration.hours)"></span> :
+          <span x-text="formattedTime(duration.minutes)"></span> :
+          <span x-text="formattedTime(duration.seconds)"></span>
+        </div>
+      </div>
 
-      <div
-        class="mx-auto grid grid-cols-3 lg:grid-cols-4 gap-3"
-      >
+      <div class="mx-auto grid grid-cols-3 lg:grid-cols-4 gap-3">
         <template x-for="card in cards">
           <div class="flex w-20 md:w-30 lg:w-40 aspect-square">
             <button
@@ -38,6 +44,13 @@
           </div>
         </template>
       </div>
+
+      <button
+        x-on:click="reset"
+        class="m-10 px-2 py-1 lg:px-4 lg:py-2 bg-orange-200 border-1 text-orange-800 border-orange-800 rounded font-semibold tracking-wide"
+      >
+        New Game
+      </button>
     </div>
 
     <script type="text/javascript" defer>
@@ -64,8 +77,13 @@
 
           cards: [],
 
+          time: 0,
+
           init() {
             this.randomiseCards();
+            setInterval(() => {
+              this.time += 1;
+            }, 1000);
           },
 
           get clearedCards() {
@@ -88,6 +106,18 @@
             return this.clearedCards.length;
           },
 
+          get duration() {
+            return {
+              seconds: this.time % 60,
+              minutes: (this.time / 60) % 60,
+              hours: (this.time / 60 / 60) % 60,
+            };
+          },
+
+          formattedTime(time) {
+            return Math.floor(time).toString().padStart(2, "0");
+          },
+
           randomiseCards() {
             this.cards = this.baseCards.sort(() => Math.random() - 0.5);
           },
@@ -99,6 +129,8 @@
               card.cleared = false;
               card.flipped = false;
             });
+
+            this.time = 0;
           },
 
           async flipCard(card) {
@@ -114,7 +146,27 @@
               this.flippedCards.forEach((card) => (card.cleared = true));
 
               if (!this.remainingCards.length) {
-                alert("You won!");
+                const hours = Math.floor(this.duration.hours);
+                const minutes = Math.floor(this.duration.minutes);
+                const seconds = Math.floor(this.duration.seconds);
+                let message = "Awesome! You finished in ";
+
+                if (hours > 0) {
+                  message += `${hours} hours, `;
+                }
+
+                if (minutes > 0) {
+                  message += `${minutes} minutes and `;
+                }
+
+                if (seconds > 0) {
+                  message += `${seconds} seconds`;
+                }
+
+                message += ".";
+
+                alert(message);
+
                 this.reset();
               }
             } else {
