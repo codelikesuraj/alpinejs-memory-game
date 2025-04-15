@@ -47,8 +47,8 @@
             <template x-for="(gamer, index) in leaderboard.list">
               <tr class="even:bg-gray-200">
                 <td x-text="index + 1"></td>
-                <td class="p-2 text-left" x-text="gamer.name"></td>
-                <td>00:00:00</td>
+                <td class="p-2 text-left" x-text="gamer.username"></td>
+                <td x-text="gamer.duration + ' secs'"></td>
               </tr>
             </template>
             <template x-if="leaderboard.message.length">
@@ -213,20 +213,20 @@
           },
 
           async fetchLeaderBoard() {
-            // const response = await fetch("my_backend_server");
-            // if (!response.ok) {
-            //   this.leaderboard.message = "error fetching gamers.";
-            //   return;
-            // }
+            const response = await fetch("https://abdulbakisuraj1.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard");
+            if (!response.ok) {
+              this.leaderboard.message = "error fetching gamers.";
+              return;
+            }
 
-            // const gamers = await response.json();
-            // if (gamers.length) {
-            //   this.leaderboard.message = "";
-            //   this.leaderboard.list = gamers;
-            //   return;
-            // }
+            const gamers = (await response.json()).gamers;
+            if (gamers.length) {
+              this.leaderboard.message = "";
+              this.leaderboard.list = gamers;
+              return;
+            }
 
-            this.leaderboard.message = "🚧 Sorry, this section is still under construction. 🚧!";
+            this.leaderboard.message = "No one is worthy yet!";
           },
 
           async flipCard(card) {
