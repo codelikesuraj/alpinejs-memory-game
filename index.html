@@ -236,7 +236,7 @@
           async updateLeaderBoard(username, duration) {
             this.isEnabled = false;
             await fetch(
-              "https://abdulbakisuraj1.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard",
+              "https://abdulbakisuraj2.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard",
               {
                 method: "POST",
                 headers: {
@@ -261,7 +261,7 @@
 
           async fetchLeaderBoard() {
             const response = await fetch(
-              "https://abdulbakisuraj1.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard"
+              "https://abdulbakisuraj2.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard"
             );
             if (!response.ok) {
               this.leaderboard.message = "error fetching gamers.";
