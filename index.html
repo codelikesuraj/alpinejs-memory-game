@@ -213,7 +213,7 @@
 
           isHighScore() {
             return (
-              this.leaderboard.list.length <= 15 ||
+              this.leaderboard.list.length < 15 ||
               this.leaderboard.list.some((gamer) => this.time < gamer.duration)
             );
           },
