@@ -130,6 +130,8 @@
     </div>
 
     <script type="text/javascript" defer>
+      const server = "http://127.0.0.1:4000/leaderboard"
+
       function pause(milliseconds) {
         return new Promise((resolve) => setTimeout(resolve, milliseconds));
       }
@@ -235,15 +237,14 @@
 
           async updateLeaderBoard(username, duration) {
             this.isEnabled = false;
-            await fetch(
-              "https://abdulbakisuraj2.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard",
+            await fetch(server,
               {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  duration: duration,
+                  duration: Number(duration),
                   username: username,
                 }),
               }
@@ -260,15 +261,14 @@
           },
 
           async fetchLeaderBoard() {
-            const response = await fetch(
-              "https://abdulbakisuraj2.app.n8n.cloud/webhook/alpine-js-memory-game/leaderboard"
-            );
+            const response = await fetch(server);
+
             if (!response.ok) {
               this.leaderboard.message = "error fetching gamers.";
               return;
             }
 
-            const gamers = (await response.json()).gamers;
+            const gamers = (await response.json()).highscores;
             if (gamers.length) {
               this.leaderboard.message = "";
               this.leaderboard.list = gamers;
